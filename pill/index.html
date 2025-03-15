@@ -1,30 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Break in a Bar Graph</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        #chart-container {
-            width: 100%;
-            max-width: 500px;
-        }
-    </style>
-    <!-- Import D3.js -->
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-</head>
-<body>
-    <h1>Break in a Bar Graph</h1>
-    <div id="chart-container"></div>
+function _1(md){return(
+    md`# Break in a bar graph`
+    )}
     
-    <script src="script.js"></script>
-</body>
-</html>
+    function _pillChart(d3,roundedRect,curvedRect,curvedLines)
+    {
+      const svg = d3.create("svg")
+          .attr("viewBox", [0, 0, 500, 250]);
+    
+     
+     
+       svg
+          .append('path')
+          .attr('class', 'a-class')
+          .attr('d', d => roundedRect(  70, 30, 100, 50,
+            [10, 10, 0, 0]
+          ))
+          .attr('fill', '#e7482e');
+      
+      svg
+          .append('path')
+          .attr('class', 'b-class')
+          .attr('d', d => roundedRect(  70,  80,  100,  100,
+            [0, 0, 10, 10]
+          ))
+          .attr('fill', '#413f6a');
+      
+      svg
+          .append('path')
+          .attr('class', 'ca-class')
+          .attr('d', d => curvedRect(
+            70,  100,  100, 10,
+            10
+          ))
+          .attr('fill', 'white') ;
+      
+       svg
+          .append('path')
+          .attr('class', 'cl-class')
+          .attr('d', d => curvedLines(
+            70,  100,  100, 10,
+            10
+          ))
+          .attr('stroke', '#413f6a')
+          .attr('fill', 'none');
+       
+      
+      return svg.node();
+    }
+    
+    
+    function _curvedRect(){return(
+    function(x , y , width , height , radius ) {
+    
+            width = width + radius;
+            const x1 = x - radius / 2;
+            const y1 = y;
+            const y2 = y + height;
+            const x2 = x + width - radius / 2;
+            return 'M' + x1 + ',' + y1
+    
+    
+                + ' Q' + (x1 + (width * (1 / 4))) + ',' + (y1 + radius)
+                + ' ' + (x1 + (width * (2 / 4))) + ',' + (y1)
+                + ' T' + (x1 + (width * (4 / 4))) + ',' + (y1)
+    
+                + 'v' + (height)
+    
+    
+                + ' Q' + (x2 - (width * (1 / 4))) + ',' + (y2 - radius)
+                + ' ' + (x2 - (width * (2 / 4))) + ',' + (y2)
+                + ' T' + (x2 - (width * (8 / 8))) + ',' + (y2)
+    
+                + 'Z';
+        }
+    )}
+    
+    function _arc(){return(
+    function(r, sign) {
+            return r ? `a${r * sign[0]},${r * sign[1]} 0 0 1 ${r * sign[2]},${r * sign[3]}` : '';
+        }
+    )}
+    
+    function _curvedLines(){return(
+    function(x, y, width, height, radius) {
+    
+            width = width + radius;
+            const x1 = x - radius / 2;
+            const y1 = y;
+            const y2 = y + height;
+            const x2 = x + width - radius / 2;
+            return 'M' + x1 + ',' + y1
+    
+    
+                + ' Q' + (x1 + (width * (1 / 4))) + ',' + (y1 + radius)
+                + ' ' + (x1 + (width * (2 / 4))) + ',' + (y1)
+                + ' T' + (x1 + (width * (4 / 4))) + ',' + (y)
+    
+    
+    
+                + 'M' + x2 + ',' + y2
+                + ' Q' + (x2 - (width * (1 / 4))) + ',' + (y2 - radius)
+                + ' ' + (x2 - (width * (2 / 4))) + ',' + (y2)
+                + ' T' + (x2 - (width * (8 / 8))) + ',' + (y2)
+    
+                ;
+        }
+    )}
+    
+    function _roundedRect(arc){return(
+    function(x, y, width, height, r) {
+            r = [Math.min(r[0], height, width),
+            Math.min(r[1], height, width),
+            Math.min(r[2], height, width),
+            Math.min(r[3], height, width)];
+    
+    
+    
+            return `M${x + r[0]},${y
+                }h${width - r[0] - r[1]}${arc(r[1], [1, 1, 1, 1])
+                }v${height - r[1] - r[2]}${arc(r[2], [1, 1, -1, 1])
+                }h${-width + r[2] + r[3]}${arc(r[3], [1, 1, -1, -1])
+                }v${-height + r[3] + r[0]}${arc(r[0], [1, 1, 1, -1])
+                }z`;
+        }
+    )}
+    
+    function _d3(require){return(
+    require("d3@5")
+    )}
+    
+    export default function define(runtime, observer) {
+      const main = runtime.module();
+      main.variable(observer()).define(["md"], _1);
+      main.variable(observer("pillChart")).define("pillChart", ["d3","roundedRect","curvedRect","curvedLines"], _pillChart);
+      main.variable(observer("curvedRect")).define("curvedRect", _curvedRect);
+      main.variable(observer("arc")).define("arc", _arc);
+      main.variable(observer("curvedLines")).define("curvedLines", _curvedLines);
+      main.variable(observer("roundedRect")).define("roundedRect", ["arc"], _roundedRect);
+      main.variable(observer("d3")).define("d3", ["require"], _d3);
+      return main;
+    }

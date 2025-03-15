@@ -1,4 +1,12 @@
 # d3-examples
 
 
-this is a test
+Some custom D3 examples.   The repo is pages enabled, so the javascript is there too.
+
+## Break in Bargraph
+
+![pill](https://github.com/robstave/d3-examples/blob/master/pill/pill.png)
+
+[Bargraph with break](https://github.com/robstave/d3-examples/pill)
+
+Bargraph with a break to indicate its actually kinda big.
