@@ -5,7 +5,7 @@ The ask for for a bar chart that showed two values, but one was way outsized to 
 Kinda silly...but here it is.  
 
 
-![pill](https://github.com/robstave/d3-examples/blob/master/pill/pill.png)
+![pill](https://github.com/robstave/d3-examples/blob/main/pill/pill.png)
 
 To see the code hosted live, click here:
 
